@@ -1,4 +1,4 @@
-﻿# ShopSmart Starter Application
+# ASC_Finals / ShopSmart Starter Application
 
 ShopSmart is an educational e-commerce application for a BSIT full-stack AI application development sequence. It contains a React front end, Express REST API, PostgreSQL database through Prisma, shopping cart, simulated checkout, customer accounts with order ownership, and a catalog-grounded product assistant.
 
