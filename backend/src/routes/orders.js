@@ -2,9 +2,10 @@ import { Router } from 'express';
 import { Prisma } from '@prisma/client';
 import { prisma } from '../lib/prisma.js';
 import { orderSchema } from '../validators/schemas.js';
+import { authenticate } from '../lib/auth.js';
 const router = Router();
 
-router.post('/', async (request, response, next) => {
+router.post('/', authenticate, async (request, response, next) => {
   try {
     const parsed = orderSchema.safeParse(request.body);
     if (!parsed.success) return response.status(422).json({ error: { code: 'INVALID_ORDER', message: 'Check the customer and cart information.', details: parsed.error.flatten() } });
@@ -29,7 +30,7 @@ router.post('/', async (request, response, next) => {
       }
       return transaction.order.create({
         data: {
-          customerName: parsed.data.customerName, email: parsed.data.email, address: parsed.data.address, total,
+          customerName: request.user.name, email: request.user.email, address: parsed.data.address, total, userId: request.user.id,
           items: { create: normalizedItems.map((item) => ({ productId: item.productId, quantity: item.quantity, unitPrice: item.product.price })) }
         },
         include: { items: true }
@@ -39,5 +40,4 @@ router.post('/', async (request, response, next) => {
   } catch (error) { next(error); }
 });
 
-// WEEK 4 IMPROVEMENT: Associate orders with authenticated users and add a protected GET route.
 export default router;

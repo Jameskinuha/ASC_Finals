@@ -37,6 +37,8 @@ input:focus, select:focus, textarea:focus { outline: 3px solid #99f6e4; border-c
 .status { background: #e6fffb; border-left: 4px solid #0f766e; border-radius: .4rem; padding: .9rem 1rem; margin: 1rem 0; }
 .status.error { background: #fff1f0; border-color: #b42318; color: #7a271a; }
 .details-layout, .checkout-layout, .assistant-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+.account-layout { max-width: 560px; margin: 0 auto; }
+.order-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
 .details-icon { min-height: 420px; }
 .cart-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start; }
 .cart-items { display: grid; gap: .8rem; }

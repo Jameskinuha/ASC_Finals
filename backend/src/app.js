@@ -6,10 +6,12 @@ import morgan from 'morgan';
 import productsRouter from './routes/products.js';
 import ordersRouter from './routes/orders.js';
 import assistantRouter from './routes/assistant.js';
+import authRouter from './routes/auth.js';
 import { prisma } from './lib/prisma.js';
 
 export function createApp({ database = prisma } = {}) {
   const app = express();
+  app.set('trust proxy', 1);
   const allowedOrigins = new Set(
     [process.env.CORS_ORIGIN, process.env.FRONTEND_URL, 'http://localhost:5173']
       .filter(Boolean)
@@ -36,6 +38,7 @@ export function createApp({ database = prisma } = {}) {
     }
   });
   app.use('/api/products', productsRouter);
+  app.use('/api/auth', authRouter);
   app.use('/api/orders', ordersRouter);
   app.use('/api/assistant', assistantRouter);
   app.use((_request, response) => response.status(404).json({ error: { code: 'ROUTE_NOT_FOUND', message: 'API route could not be found.' } }));

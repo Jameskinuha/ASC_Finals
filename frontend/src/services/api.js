@@ -1,9 +1,10 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 async function request(path, options = {}) {
+  const token = localStorage.getItem('shopsmart_token');
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
-    headers: { 'Content-Type': 'application/json', ...options.headers }
+    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers }
   });
 
   const data = await response.json().catch(() => null);
@@ -18,6 +19,10 @@ async function request(path, options = {}) {
 }
 
 export const api = {
+  register: (account) => request('/auth/register', { method: 'POST', body: JSON.stringify(account) }),
+  login: (credentials) => request('/auth/login', { method: 'POST', body: JSON.stringify(credentials) }),
+  getMe: () => request('/auth/me'),
+  getOrders: () => request('/auth/orders'),
   getProducts: (query = '') => request(`/products${query ? `?search=${encodeURIComponent(query)}` : ''}`),
   getProduct: (id) => request(`/products/${id}`),
   createOrder: (order) => request('/orders', { method: 'POST', body: JSON.stringify(order) }),

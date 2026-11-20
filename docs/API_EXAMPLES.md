@@ -22,8 +22,24 @@ GET http://localhost:3000/api/products/1
 
 ## Create a simulated order
 
+Create or sign in to a customer account first, then use the returned bearer token. The account creation example uses fictional classroom data.
+
+```http
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Ana Reyes",
+  "email": "ana@example.com",
+  "password": "classroom-demo-password"
+}
+```
+
+Use the `token` from that response in the order request. Sign-in uses `POST /api/auth/login` with `email` and `password`.
+
 ```http
 POST http://localhost:3000/api/orders
+Authorization: Bearer YOUR_TOKEN
 Content-Type: application/json
 
 {
@@ -37,7 +53,7 @@ Content-Type: application/json
 }
 ```
 
-The server ignores prices from the browser and reads authoritative prices from PostgreSQL.
+The server ignores prices from the browser, reads authoritative prices from PostgreSQL, and associates the order with the signed-in account. `GET /api/auth/orders` requires the same bearer token and returns only that account's orders. Requests without a valid token receive HTTP 401.
 
 ## Ask the starter assistant
 
